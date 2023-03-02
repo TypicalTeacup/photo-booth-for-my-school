@@ -1,0 +1,44 @@
+html {
+  background: #fafafa;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#search-container {
+  padding: 0.5rem;
+}
+
+#search {
+  padding: 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 25px;
+  box-shadow: 2px 2px 6px #00000077;
+  transition: all cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.3s;
+  width: 25%;
+}
+
+#search:focus {
+  width: 75%;
+}
+
+#photos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.photolink {
+  padding: 0.5rem;
+}
+
+.photolink > img {
+  object-fit: cover;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 25px;
+  box-shadow: 2px 2px 6px #00000077;
+}

@@ -1,3 +1,4 @@
 /node_modules
-/photos
+/server/node_modules
+/server/public/photos
 /public
