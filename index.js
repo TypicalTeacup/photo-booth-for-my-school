@@ -20,16 +20,20 @@ usb.addListener("attach", async (_) => {
     try {
         storageFiles = fs.readdirSync(fullPath);
     } catch {
-        console.log("a weź się pierdol")
-        return
+        console.log("a weź się pierdol");
+        return;
     }
-    
+
     const bar = new SingleBar({ clearOnComplete: true }, Presets.legacy);
     bar.start(storageFiles.length, 0);
     let fileProgress = 0;
     storageFiles.forEach((filename) => {
         try {
-            fs.cpSync(`${fullPath}/${filename}`, `./server/public/photos/${filename}`, {});
+            fs.cpSync(
+                `${fullPath}/${filename}`,
+                `./server/public/photos/${filename}`,
+                {}
+            );
             fs.rmSync(`${fullPath}/${filename}`);
             bar.update(++fileProgress);
         } catch {
@@ -37,5 +41,4 @@ usb.addListener("attach", async (_) => {
         }
     });
     bar.stop();
-
 });

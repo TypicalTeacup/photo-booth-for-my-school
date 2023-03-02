@@ -6,37 +6,42 @@ let fuse = new Fuse();
 let allPhotos;
 let photos;
 
-fetch(`http://${window.location.host}/api/photos`)
-  .then((r) => r.json())
-  .then((apiPhotos) => {
-    allPhotos = apiPhotos;
-    photos = apiPhotos;
-    fuse.setCollection(allPhotos);
-    renderPhotos();
-  });
+const fetchPhotos = () => {
+    fetch(`http://${window.location.host}/api/photos`)
+        .then((r) => r.json())
+        .then((apiPhotos) => {
+            allPhotos = apiPhotos;
+            photos = apiPhotos;
+            fuse.setCollection(allPhotos);
+            renderPhotos();
+        });
+};
+fetchPhotos();
+
+document.querySelector("#refresh").addEventListener("click", fetchPhotos);
 
 const renderPhotos = () => {
-  photosDiv.innerHTML = "";
-  photos.forEach((photo) => {
-    const link = document.createElement("a");
-    link.classList.add("photolink");
-    link.href = `photos/${photo}`;
+    photosDiv.innerHTML = "";
+    photos.forEach((photo) => {
+        const link = document.createElement("a");
+        link.classList.add("photolink");
+        link.href = `photos/${photo}`;
 
-    const image = document.createElement("img");
-    image.loading = "lazy";
-    image.src = `photos/${photo}`;
-    link.appendChild(image);
+        const image = document.createElement("img");
+        image.loading = "lazy";
+        image.src = `photos/${photo}`;
+        link.appendChild(image);
 
-    photosDiv.appendChild(link);
-  });
+        photosDiv.appendChild(link);
+    });
 };
 
 searchbar.addEventListener("input", () => {
-  const value = searchbar.value;
-  if (value == "") {
-    photos = allPhotos;
-  } else {
-    photos = fuse.search(value).map((obj) => obj.item);
-  }
-  renderPhotos();
+    const value = searchbar.value;
+    if (value == "") {
+        photos = allPhotos;
+    } else {
+        photos = fuse.search(value).map((obj) => obj.item);
+    }
+    renderPhotos();
 });

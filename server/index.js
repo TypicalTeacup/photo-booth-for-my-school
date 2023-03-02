@@ -11,10 +11,10 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
 app.get("/api/photos", (request, result) => {
-  const photoslist = fs.readdirSync(`${__dirname}/public/photos`);
-  result.status(200).send(photoslist);
+    const photoslist = fs.readdirSync(`${__dirname}/public/photos`).reverse();
+    result.status(200).send(photoslist);
 });
 
 app.listen(80, () => {
-  console.log(`server running on port 80`);
+    console.log(`server running on port 80`);
 });
