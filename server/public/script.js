@@ -18,7 +18,10 @@ const fetchPhotos = () => {
 };
 fetchPhotos();
 
-document.querySelector("#refresh").addEventListener("click", fetchPhotos);
+document.querySelector("#refresh").addEventListener("click", () => {
+    fetchPhotos();
+    searchbar.value = "";
+});
 
 const renderPhotos = () => {
     photosDiv.innerHTML = "";
