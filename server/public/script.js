@@ -20,7 +20,7 @@ fetchPhotos();
 
 document.querySelector("#refresh").addEventListener("click", () => {
     fetchPhotos();
-    searchbar.value = "";
+    searchbar.innerText = "";
 });
 
 const renderPhotos = () => {
@@ -41,7 +41,7 @@ const renderPhotos = () => {
 };
 
 searchbar.addEventListener("input", () => {
-    const value = searchbar.value;
+    const value = searchbar.innerText;
     if (value == "") {
         photos = allPhotos;
     } else {
