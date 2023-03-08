@@ -1,1 +1,1 @@
-<?=json_encode(array_slice(scandir(dirname(__FILE__,3)."/photos"), 2));?>
+<?=json_encode(array_reverse(array_slice(scandir(dirname(__FILE__,3)."/photos"), 2)));?>
