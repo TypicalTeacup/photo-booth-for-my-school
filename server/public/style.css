@@ -21,12 +21,14 @@ body {
 
 #refresh {
     height: 1.7rem;
-    transition: all cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s;
+    transition: all cubic-bezier(0.68, -0.55, 0.265, 1.55) .75s;
     cursor: pointer;
 }
 
 #refresh:hover {
-    rotate: 360deg;
+    rotate: 180deg;
+    filter: invert(87%) sepia(6%) saturate(2105%) hue-rotate(161deg)
+        brightness(100%) contrast(106%);
 }
 
 #search {
