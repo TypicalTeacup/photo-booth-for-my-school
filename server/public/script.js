@@ -29,7 +29,7 @@ const renderPhotos = () => {
         const link = document.createElement("a");
         link.classList.add("photolink");
         link.href = `photos/${photo}`;
-        link.target = "_blank"
+        link.target = "_blank";
 
         const image = document.createElement("img");
         image.loading = "lazy";
