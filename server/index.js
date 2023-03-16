@@ -7,10 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
-app.get("/api/photos", (request, result) => {
+app.get("/api/photos", express.json(), (request, result) => {
     const photoslist = fs.readdirSync(`${__dirname}/public/photos`).reverse();
     result.status(200).send(photoslist);
 });
