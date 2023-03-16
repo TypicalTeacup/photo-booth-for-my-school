@@ -20,32 +20,34 @@ body {
 
 #refresh {
     height: 1.7rem;
-    transition: all cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s;
+    aspect-ratio: 0.97/1;
+    mask-image: url(refresh.svg);
+    background-color: #000;
+    transition: all cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.75s;
     cursor: pointer;
 }
 
 #refresh:hover {
-    rotate: 360deg;
+    rotate: 180deg;
+    background-color: #ff6e9a;
 }
 
 #search {
     font-size: 1rem;
     padding: 0.5rem;
-    border: 1px solid #aaa;
+    border-radius: 25px;
+    border: none;
+    outline: 1px solid #aaa;
     border-radius: 7px;
     box-shadow: 2px 2px 6px #00000077;
     transition: all cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.3s;
     width: 15rem;
 }
 
-#search:empty::before {
-    content: "Wyszukaj";
-    color: #aaa;
-}
-
 #search:focus {
-    box-shadow: 0px 0px 6px 4px #0cefff77;
+    box-shadow: 0px 0px 6px 4px #74d7ec;
     width: 50rem;
+    outline: 2px solid #aaa;
 }
 
 #photos {
@@ -79,8 +81,10 @@ body {
         color: #eee;
     }
     #refresh {
-        filter: invert(99%) sepia(25%) saturate(9%) hue-rotate(235deg)
-            brightness(112%) contrast(87%);
+        background-color: #fff;
+    }
+    #refresh:hover {
+        background-color: #ffafc7;
     }
 }
 
