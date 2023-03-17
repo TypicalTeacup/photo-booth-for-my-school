@@ -2,44 +2,30 @@ import { usb } from "usb";
 import drivelist from "drivelist";
 import { SingleBar, Presets } from "cli-progress";
 import fs from "fs";
-import FormData from "form-data";
-import axios from "axios";
+import ftpClient from "ftp-client";
 
 import path from "path";
 import { fileURLToPath } from "url";
 
+const client = new ftpClient({
+    host: "192.168.31.17",
+    user: "pi",
+    password: "raspberry",
+});
+
+client.connect(() => {
+    console.log("connected to server");
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const sendFile = async (filename) => {
-    const form = new FormData();
-    form.append("photo", fs.readFileSync(filename));
-
-    const options = {
-        method: "POST",
-        url: "http://localhost/public/api/send",
-        headers: {
-            "Content-Type":
-                "multipart/form-data; boundary=---011000010111000001101001",
-        },
-        data: "[form]",
-    };
-
-    axios
-        .request(options)
-        .then(function (response) {
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
-};
 
 const pathToPhotos = "DCIM";
 console.log(await drivelist.list());
 
 usb.addListener("attach", async (_) => {
     console.log("usb connected");
+    console.log(await drivelist.list());
     const removableDrives = (await drivelist.list()).filter(
         (dev) => (dev.isRemovable || dev.isUSB) && dev.error === null
     );
@@ -71,14 +57,20 @@ usb.addListener("attach", async (_) => {
     copyBar.stop();
 
     console.log("odłączaj teraz");
+    client.connect(() => {
+        console.log("connected to server");
+        client.upload(
+            "photos/**",
+            "/var/www/html/photos",
+            {
+                baseDir: "photos",
+                overwrite: "all",
+            },
+            (result) => {
+                result.uploadedFiles.forEach((file) => {
+                    fs.rmSync(`${__dirname}/${file}`);
+                });
+            }
+        );
+    });
 });
-
-const sendBar = new SingleBar({ clearOnComplete: true }, Presets.legacy);
-const localPhotos = fs.readdirSync(`${__dirname}/photos`);
-let sendProgress = 0;
-localPhotos.forEach(async (filename) => {
-    // TODO: przesyłanko
-    console.log(await sendFile(`${__dirname}/photos/${filename}`));
-    sendBar.update(++sendProgress);
-});
-sendBar.stop();
