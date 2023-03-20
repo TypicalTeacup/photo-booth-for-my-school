@@ -4,6 +4,10 @@ import { SingleBar, Presets } from "cli-progress";
 import fs from "fs";
 import ftpClient from "ftp-client";
 
+import keypress from "keypress";
+
+keypress(process.stdin);
+
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -13,23 +17,16 @@ const client = new ftpClient({
     password: "raspberry",
 });
 
-client.connect(() => {
-    console.log("connected to server");
-});
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const pathToPhotos = "DCIM";
+const pathToPhotos = "DCIM/100CANON";
 console.log(await drivelist.list());
 
-usb.addListener("attach", async (_) => {
-    console.log("usb connected");
-    console.log(await drivelist.list());
+const usbListener = async (_) => {
     const removableDrives = (await drivelist.list()).filter(
         (dev) => (dev.isRemovable || dev.isUSB) && dev.error === null
     );
-    console.log(removableDrives.length);
     if (removableDrives.length === 0) return;
     console.log(`found ${removableDrives[0].description}`);
     const mp = removableDrives[0].mountpoints[0].path;
@@ -73,4 +70,8 @@ usb.addListener("attach", async (_) => {
             }
         );
     });
-});
+};
+
+usb.addListener("attach", usbListener);
+
+process.stdin.on("keypress", usbListener);
