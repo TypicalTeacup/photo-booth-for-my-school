@@ -12,16 +12,36 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const client = new ftpClient({
-    host: "192.168.31.17",
-    user: "pi",
-    password: "raspberry",
+    host: "127.0.0.1",
+    user: "ok",
+    password: "okok",
+});
+
+client.connect(() => {
+    console.log("connected to server");
 });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const pathToPhotos = "DCIM/100CANON";
-console.log(await drivelist.list());
+
+const upload = () => {
+    client.upload(
+        "photos/**",
+        "/photos",
+        {
+            baseDir: "photos",
+            overwrite: "all",
+        },
+        (result) => {
+            console.log(result);
+            result.uploadedFiles.forEach((file) => {
+                fs.rmSync(`${__dirname}/${file}`);
+            });
+        }
+    );
+}
 
 const usbListener = async (_) => {
     const removableDrives = (await drivelist.list()).filter(
@@ -54,22 +74,9 @@ const usbListener = async (_) => {
     copyBar.stop();
 
     console.log("odłączaj teraz");
-    client.connect(() => {
-        console.log("connected to server");
-        client.upload(
-            "photos/**",
-            "/var/www/html/photos",
-            {
-                baseDir: "photos",
-                overwrite: "all",
-            },
-            (result) => {
-                result.uploadedFiles.forEach((file) => {
-                    fs.rmSync(`${__dirname}/${file}`);
-                });
-            }
-        );
-    });
+
+    client.connect(() => {upload()});
+    
 };
 
 usb.addListener("attach", usbListener);
